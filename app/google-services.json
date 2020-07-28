@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "34654234262",
+    "firebase_url": "https://instaclonekt1.firebaseio.com",
+    "project_id": "instaclonekt1",
+    "storage_bucket": "instaclonekt1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34654234262:android:a13bb307179b7d0ca7c4b7",
+        "android_client_info": {
+          "package_name": "com.coolwhite.instaclonekt1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "34654234262-oqf83a1ci5khlieufs3amckcctre3giv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK5NN39cOFFZwkIlr7xdnuNiqdabl3bGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "34654234262-oqf83a1ci5khlieufs3amckcctre3giv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
