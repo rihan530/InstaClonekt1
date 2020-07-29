@@ -11,8 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.coolwhite.instaclonekt1.navigation.DetailViewFragment
-import com.coolwhite.instaclonekt1.navigation.GridFragment
+import com.coolwhite.instaclonekt1.navigation.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -104,6 +103,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
         // 앨범에서 Profile Image 사진 선택시 호출 되는 부분분
         if (requestCode == PICK_PROFILE_FROM_ALBUM && resultCode == Activity.RESULT_OK) {
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                     .child(uid)
                     .putFile(imageUri!!)
                     .addOnCompleteListener { task ->
-                        val url = task.result.downloadUrl.toString()
+                        val url = task.result.toString()
                         val map = HashMap<String, Any>()
                         map["image"] = url
                         FirebaseFirestore.getInstance().collection("profileImages").document(uid).set(map)

@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">InstaClone</string>
-    <string name="facebook_app_id">3137712502984788</string>
-    <string name="fb_login_protocol_scheme">fb3137712502984788</string>
+    <string name="facebook_app_id">300349011036030</string>
+    <string name="fb_login_protocol_scheme">fb300349011036030</string>
+
 
     <!-- Sign In -->
     <string name="email">Email</string>
@@ -48,6 +49,7 @@
 
     <!-- Toolbar -->
     <string name="back">Back</string>
+
 
 
     <!-- etc -->
