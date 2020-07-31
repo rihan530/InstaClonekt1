@@ -4,15 +4,16 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.coolwhite.instaclonekt1.navigation.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     val PICK_PROFILE_FROM_ALBUM = 10
+    var mBackWait:Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
         //푸시토큰 서버 등록
         registerPushToken()
+        progress_bar.visibility = View.GONE
     }
 
     fun registerPushToken(){
@@ -110,7 +113,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
             var imageUri = data?.data
 
-
             val uid = FirebaseAuth.getInstance().currentUser!!.uid //파일 업로드
             //사진을 업로드 하는 부분  userProfileImages 폴더에 uid에 파일을 업로드함
             FirebaseStorage
@@ -126,5 +128,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                         FirebaseFirestore.getInstance().collection("profileImages").document(uid).set(map)
                     }
         }
+    }
+
+    private var lastTimeBackPressed:Long=-1500
+
+    override fun onBackPressed() {
+        // (현재 버튼 누른 시간-이전에 버튼 누른 시간) <=1.5초일 때 동작
+        if(System.currentTimeMillis()-lastTimeBackPressed<=1500)
+            finish()
+        lastTimeBackPressed=System.currentTimeMillis()
+        Toast.makeText(this,"이전 버튼을 한 번 더 누르면 종료됩니다",Toast.LENGTH_SHORT).show()
     }
 }

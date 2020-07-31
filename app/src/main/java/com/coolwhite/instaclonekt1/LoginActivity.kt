@@ -14,6 +14,7 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.GoogleAuthUtil.getToken
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -29,6 +30,8 @@ import java.security.NoSuchAlgorithmException
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
+
+    private val TAG = "user_uid"
 
     var auth: FirebaseAuth? = null
 
@@ -62,6 +65,18 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         printHashKey(this)
         callbackManager = CallbackManager.Factory.create()
+
+        val user = auth!!.currentUser
+        if (user != null) {
+            Log.d(TAG, "firebaseAuthWithGoogle_uid: " + user.uid)
+            Log.d(TAG, "firebaseAuthWithGoogle_uid: " + user.displayName)
+        }
+        user?.let {
+            for (profile in it.providerData) {
+                val uid = profile.uid
+                Log.d(TAG, "uid: " + uid)
+            }
+        }
 
     }
 
@@ -130,6 +145,19 @@ class LoginActivity : AppCompatActivity() {
 
                 task ->
             if(task.isSuccessful){
+                val user = auth!!.currentUser
+                if (user != null) {
+                    Log.d(TAG, "firebaseAuthWithGoogle_uid: " + user.uid)
+                    Log.d(TAG, "firebaseAuthWithGoogle_uid: " + user.displayName)
+
+                    Log.d(TAG, "firebaseAuthWithGoogle_uid: " + user.uid + "/" + user.metadata.toString() + "/" + auth!!.uid  + googleSignInClient!!.instanceId)
+                }
+                user?.let {
+                    for (profile in it.providerData) {
+                        val uid = profile.uid
+                        Log.d(TAG, "uid: " + uid)
+                    }
+                }
                 moveMainPage(auth?.currentUser)
             }
         }
@@ -186,6 +214,18 @@ class LoginActivity : AppCompatActivity() {
             if (result!!.isSuccess) {
                 var account = result!!.signInAccount
                 firebaseAuthWithGoogle(account!!)
+
+                val user = auth!!.currentUser
+                if (user != null) {
+                    Log.d(TAG, "firebaseAuthWithGoogle_uid: " + user.uid)
+                    Log.d(TAG, "firebaseAuthWithGoogle_uid: " + user.displayName)
+                }
+                user?.let {
+                    for (profile in it.providerData) {
+                        val uid = profile.uid
+                        Log.d(TAG, "uid: " + uid)
+                    }
+                }
             }
         }
 
