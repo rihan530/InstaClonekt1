@@ -1,5 +1,6 @@
 package com.coolwhite.instaclonekt1.navigation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,15 +30,25 @@ class DetailViewFragment : Fragment() {
     var firestore: FirebaseFirestore? = null
     var user: FirebaseAuth? = null
     var fcmPush :FcmPush? = null
+    var uid : String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         firestore = FirebaseFirestore.getInstance()
         user = FirebaseAuth.getInstance()
         fcmPush = FcmPush()
+
+        uid = FirebaseAuth.getInstance().currentUser?.uid
+
         var view = LayoutInflater.from(inflater.context).inflate(R.layout.fragment_detail, container, false)
         view.detailviewfragment_recyclerview.adapter = DetailViewRecyclerViewAdapter()
         view.detailviewfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
+
+        var layoutManager : LinearLayoutManager? = LinearLayoutManager(activity)
+        layoutManager!!.reverseLayout = true
+        layoutManager!!.stackFromEnd = true
+
+        view.detailviewfragment_recyclerview.layoutManager = layoutManager
 
         return view
     }
@@ -51,6 +62,9 @@ class DetailViewFragment : Fragment() {
             firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 contentDTOs.clear()
                 contentUidList.clear()
+
+                if (querySnapshot == null) return@addSnapshotListener
+
                 for(snapshot in querySnapshot!!.documents) {
                     var item = snapshot.toObject(ContentDTO::class.java)
                     contentDTOs.add(item!!)
@@ -91,6 +105,53 @@ class DetailViewFragment : Fragment() {
             // ProfileImage
             Glide.with(p0.itemView.context).load(contentDTOs!![p1].imageUrl).into(viewholder.detailviewitem_profile_image)
 
+            // 버튼이 클릭되었을때
+            viewholder.detailviewitem_favorite_imageview.setOnClickListener {
+                favoriteEvent(p1)
+            }
+            
+            // 페이지가 로드되었을때
+            if (contentDTOs!![p1].favorites.containsKey(uid)) {
+                // 좋아요 버튼 클릭시
+                viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
+            } else {
+                // 좋아요 버튼 클릭하지 않음
+                viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
+            }
+
+            // 프로필 이미지 클릭했을때
+            viewholder.detailviewitem_profile_image.setOnClickListener {
+                var fragment = UserFragment()
+                var bundle = Bundle()
+                bundle.putString("destinationUid", contentDTOs[p1].uid)
+                bundle.putString("userId", contentDTOs[p1].userId)
+                fragment.arguments = bundle
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragment)?.commit()
+            }
+            viewholder.detailviewitem_comment_imageview.setOnClickListener { v ->
+                var intent = Intent(v.context, CommentActivity::class.java)
+                intent.putExtra("contentUid", contentUidList[p1])
+                startActivity(intent)
+            }
+        }
+
+        fun favoriteEvent(position : Int) {
+            var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
+            firestore?.runTransaction { transaction ->
+
+                var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
+
+                if (contentDTO!!.favorites.containsKey(uid)) {
+                    // 버튼이 클릭되었을때
+                    contentDTO?.favoriteCount = contentDTO?.favoriteCount -1
+                    contentDTO?.favorites.remove(uid)
+                } else {
+                    // 클릭이 안됐을경우
+                    contentDTO?.favoriteCount = contentDTO?.favoriteCount + 1
+                    contentDTO.favorites[uid!!] = true
+                }
+                transaction.set(tsDoc, contentDTO)
+            }
         }
     }
 }

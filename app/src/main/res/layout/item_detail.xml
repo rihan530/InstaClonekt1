@@ -28,7 +28,7 @@
         android:id="@+id/detailviewitem_imageview_content"
         android:scaleType="fitXY"
         android:layout_width="match_parent"
-        android:layout_height="500dp"/>
+        android:layout_height="550dp"/>
     
     <LinearLayout
         android:layout_marginLeft="8dp"

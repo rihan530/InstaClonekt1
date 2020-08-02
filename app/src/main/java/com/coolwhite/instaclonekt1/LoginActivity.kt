@@ -80,6 +80,11 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        moveMainPage(auth?.currentUser)
+    }
+
     fun printHashKey(pContext: Context) {
         try {
             val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
@@ -116,6 +121,7 @@ class LoginActivity : AppCompatActivity() {
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     moveMainPage(auth?.currentUser)
+                    Toast.makeText(this, "이메일 로그인 성공", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
                 }
@@ -136,6 +142,7 @@ class LoginActivity : AppCompatActivity() {
 
         var signInIntent = googleSignInClient?.signInIntent
         startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
+        Toast.makeText(this, "구글 로그인 성공", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -184,6 +191,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
             })
+        Toast.makeText(this, "페이스북 로그인 성공", Toast.LENGTH_SHORT).show()
 
     }
 

@@ -2,8 +2,11 @@ package com.coolwhite.instaclonekt1.model
 
 class FollowDTO {
 
-    val followings: MutableMap<String, Boolean>
-        get() {
-            TODO()
-        }
+    var followerCount : Int = 0
+    var followers : MutableMap<String, Boolean> = HashMap()
+
+    var followingCount : Int = 0
+    var followings : MutableMap<String, Boolean> = HashMap()
+
+
 }

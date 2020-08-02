@@ -12,18 +12,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.coolwhite.instaclonekt1.navigation.*
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     val PICK_PROFILE_FROM_ALBUM = 10
-    var mBackWait:Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,20 +114,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
             var imageUri = data?.data
 
-            val uid = FirebaseAuth.getInstance().currentUser!!.uid //파일 업로드
+            var uid = FirebaseAuth.getInstance().currentUser?.uid //파일 업로드
+
+            var storageRef = FirebaseStorage.getInstance().reference.child("userProfileImages").child(uid!!)
+
             //사진을 업로드 하는 부분  userProfileImages 폴더에 uid에 파일을 업로드함
-            FirebaseStorage
-                    .getInstance()
-                    .reference
-                    .child("userProfileImages")
-                    .child(uid)
-                    .putFile(imageUri!!)
-                    .addOnCompleteListener { task ->
-                        val url = task.result.toString()
-                        val map = HashMap<String, Any>()
-                        map["image"] = url
-                        FirebaseFirestore.getInstance().collection("profileImages").document(uid).set(map)
-                    }
+            storageRef.putFile(imageUri!!).continueWithTask { task : Task<UploadTask.TaskSnapshot> ->
+                return@continueWithTask storageRef.downloadUrl
+            }.addOnSuccessListener { uri ->
+                var map = HashMap<String, Any>()
+                map["image"] = uri.toString()
+                FirebaseFirestore.getInstance().collection("profileImages").document(uid).set(map)
+            }
         }
     }
 
