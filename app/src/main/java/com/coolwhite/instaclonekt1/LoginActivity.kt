@@ -142,7 +142,7 @@ class LoginActivity : AppCompatActivity() {
 
         var signInIntent = googleSignInClient?.signInIntent
         startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
-        Toast.makeText(this, "구글 로그인 성공", Toast.LENGTH_SHORT).show()
+
 
     }
 
@@ -166,6 +166,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
                 moveMainPage(auth?.currentUser)
+                Toast.makeText(this, "구글 로그인 성공", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -191,7 +192,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
             })
-        Toast.makeText(this, "페이스북 로그인 성공", Toast.LENGTH_SHORT).show()
+
 
     }
 
@@ -201,6 +202,7 @@ class LoginActivity : AppCompatActivity() {
                 task ->
             if(task.isSuccessful){
                 moveMainPage(auth?.currentUser)
+                Toast.makeText(this, "페이스북 로그인 성공", Toast.LENGTH_SHORT).show()
             }
 
         }

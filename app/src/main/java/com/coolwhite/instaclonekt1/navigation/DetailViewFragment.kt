@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.coolwhite.instaclonekt1.MainActivity
 import com.coolwhite.instaclonekt1.R
+import com.coolwhite.instaclonekt1.model.AlarmDTO
 import com.coolwhite.instaclonekt1.model.ContentDTO
 import com.coolwhite.instaclonekt1.model.FollowDTO
 import com.google.firebase.auth.FirebaseAuth
@@ -131,6 +132,7 @@ class DetailViewFragment : Fragment() {
             viewholder.detailviewitem_comment_imageview.setOnClickListener { v ->
                 var intent = Intent(v.context, CommentActivity::class.java)
                 intent.putExtra("contentUid", contentUidList[p1])
+                intent.putExtra("destinationUid", contentDTOs[p1].uid)
                 startActivity(intent)
             }
         }
@@ -149,9 +151,19 @@ class DetailViewFragment : Fragment() {
                     // 클릭이 안됐을경우
                     contentDTO?.favoriteCount = contentDTO?.favoriteCount + 1
                     contentDTO.favorites[uid!!] = true
+                    favoriteAlarm(contentDTOs[position].uid!!)
                 }
                 transaction.set(tsDoc, contentDTO)
             }
+        }
+        fun favoriteAlarm(destinationUid : String) {
+            var alarmDTO = AlarmDTO()
+            alarmDTO.destinationUid = destinationUid
+            alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
+            alarmDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
+            alarmDTO.kind = 0
+            alarmDTO.timestamp = System.currentTimeMillis()
+            FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
         }
     }
 }

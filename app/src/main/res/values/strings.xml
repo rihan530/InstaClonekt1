@@ -34,9 +34,9 @@
     <string name="count_0">0</string>
 
     <!-- Alarm -->
-    <string name="alarm_favorite">Liked the press</string>
-    <string name="alarm_comment">left a message</string>
-    <string name="alarm_follow">has started to follow your account</string>
+    <string name="alarm_favorite">게시글을 좋아합니다.</string>
+    <string name="alarm_comment">댓글을 남겼습니다.</string>
+    <string name="alarm_follow">당신의 계정을 팔로우합니다.</string>
 
     <!-- Comment -->
     <string name="send">Send</string>

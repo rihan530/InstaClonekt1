@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.coolwhite.instaclonekt1.LoginActivity
 import com.coolwhite.instaclonekt1.MainActivity
 import com.coolwhite.instaclonekt1.R
+import com.coolwhite.instaclonekt1.model.AlarmDTO
 import com.coolwhite.instaclonekt1.model.ContentDTO
 import com.coolwhite.instaclonekt1.model.FollowDTO
 import com.coolwhite.instaclonekt1.navigation.DetailViewFragment.DetailViewRecyclerViewAdapter.CustomViewHolder
@@ -164,6 +165,7 @@ class UserFragment : Fragment() {
                 followDTO = FollowDTO()
                 followDTO!!.followerCount = 1
                 followDTO!!.followers[currentUserUid!!] = true
+                followerAlarm(uid!!)
 
                 transaction.set(tsDocFollower, followDTO!!)
                 return@runTransaction
@@ -176,10 +178,21 @@ class UserFragment : Fragment() {
                 // 팔로우를 하지 않았을 경우
                 followDTO!!.followerCount = followDTO!!.followerCount + 1
                 followDTO!!.followers[currentUserUid!!] = true
+                followerAlarm(uid!!)
             }
             transaction.set(tsDocFollower, followDTO!!)
             return@runTransaction
         }
+    }
+
+    fun followerAlarm(destinationUid : String) {
+        var alramDTO = AlarmDTO()
+        alramDTO.destinationUid = destinationUid
+        alramDTO.userId = auth?.currentUser?.email
+        alramDTO.uid = auth?.currentUser?.uid
+        alramDTO.kind = 2
+        alramDTO.timestamp = System.currentTimeMillis()
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alramDTO)
     }
 
     fun getProfileImage() {
