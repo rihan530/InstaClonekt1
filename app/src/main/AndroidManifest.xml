@@ -44,6 +44,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".navigation.AddPhotoActivity" />
+        <!-- FCM 설정 -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/push_icon" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
     </application>
 
 </manifest>

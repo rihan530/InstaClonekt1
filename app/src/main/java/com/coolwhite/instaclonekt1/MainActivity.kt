@@ -20,7 +20,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
+import com.squareup.okhttp.internal.Internal.instance
 import kotlinx.android.synthetic.main.activity_main.*
+import com.squareup.okhttp.internal.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -41,6 +43,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         registerPushToken()
         progress_bar.visibility = View.GONE
     }
+
+    // 푸시 메세지 나오는지 테스트
+//    override fun onStop() {
+//        super.onStop()
+//        FcmPush.instance.sendMessage("Tx7kJNXreVZpQKZYIu5YYPpADYV2", "test", "test")
+//    }
 
     fun registerPushToken(){
         var pushToken = FirebaseInstanceId.getInstance().token
@@ -136,6 +144,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         if(System.currentTimeMillis()-lastTimeBackPressed<=1500)
             finish()
         lastTimeBackPressed=System.currentTimeMillis()
-        Toast.makeText(this,"이전 버튼을 한 번 더 누르면 종료됩니다",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"@string/backPressed",Toast.LENGTH_SHORT).show()
     }
 }

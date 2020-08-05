@@ -12,4 +12,5 @@
     <color name="colorEmailSignIn">#009688</color>
     <color name="colorEmailSignInPressed">#004D40</color>
     <color name="back">#F1F1F1</color>
+    <color name="black">#000000</color>
 </resources>

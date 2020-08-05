@@ -79,23 +79,29 @@ class AlarmFragment : Fragment() {
 
             when(alarmDTOList[p1].kind) {
                 0 -> {
-                    val str_0 = alarmDTOList[p1].userId + " 사용자가 " + getString(R.string.alarm_favorite)
-                    view.commentviewitem_textview_profile.text = str_0
+                    if (!alarmDTOList[p1].userId.equals(FirebaseAuth.getInstance().currentUser?.email)) {
+                        val str_0 = alarmDTOList[p1].userId + " 사용자가 " + getString(R.string.alarm_favorite)
+                        view.commentviewitem_textview_profile.text = str_0
+                    } else {
+                        view.layoutParams.height = 0
+                    }
                 }
                 1 -> {
                     if (!alarmDTOList[p1].userId.equals(FirebaseAuth.getInstance().currentUser?.email)) {
-                        val str_1 = alarmDTOList[p1].userId + " 사용자가 " + alarmDTOList[p1].message + " " + getString(R.string.alarm_comment)
-                        view.commentviewitem_textview_profile.text = str_1
+                        val str_0 = alarmDTOList[p1].userId + " 사용자가 " + alarmDTOList[p1].message + " " + getString(R.string.alarm_comment)
+                        view.commentviewitem_textview_profile.text = str_0
                     } else {
-                        view.commentviewitem_imageview_profile.visibility = View.GONE
-                        view.commentviewitem_textview_profile.visibility = View.GONE
-                        
+                        view.layoutParams.height = 0
                     }
 
                 }
                 2 -> {
-                    val str_2 = alarmDTOList[p1].userId + " 사용자가 " + getString(R.string.alarm_follow)
-                    view.commentviewitem_textview_profile.text = str_2
+                    if (!alarmDTOList[p1].userId.equals(FirebaseAuth.getInstance().currentUser?.email)) {
+                        val str_0 = alarmDTOList[p1].userId + " 사용자가 " + getString(R.string.alarm_follow)
+                        view.commentviewitem_textview_profile.text = str_0
+                    } else {
+                        view.layoutParams.height = 0
+                    }
                 }
             }
             view.commentviewitem_textview_comment.visibility = View.INVISIBLE

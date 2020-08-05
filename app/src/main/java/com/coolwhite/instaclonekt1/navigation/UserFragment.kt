@@ -193,6 +193,9 @@ class UserFragment : Fragment() {
         alramDTO.kind = 2
         alramDTO.timestamp = System.currentTimeMillis()
         FirebaseFirestore.getInstance().collection("alarms").document().set(alramDTO)
+
+        var message = auth?.currentUser?.email + "이 " + getString(R.string.alarm_follow)
+        FcmPush.instance.sendMessage(destinationUid, "InstaClone", message)
     }
 
     fun getProfileImage() {

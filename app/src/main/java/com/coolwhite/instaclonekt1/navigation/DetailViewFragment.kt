@@ -24,7 +24,9 @@ import kotlinx.android.synthetic.main.activity_add_photo.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.progress_bar
 import kotlinx.android.synthetic.main.fragment_detail.view.*
+import kotlinx.android.synthetic.main.item_comment.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
+import kotlinx.android.synthetic.main.item_detail.view.commentviewitem_imageview_profile
 
 class DetailViewFragment : Fragment() {
 
@@ -104,7 +106,13 @@ class DetailViewFragment : Fragment() {
             viewholder.detailviewitem_favoritecounter_textview.text = "Likes " + contentDTOs!![p1].favoriteCount
 
             // ProfileImage
-            Glide.with(p0.itemView.context).load(contentDTOs!![p1].imageUrl).into(viewholder.detailviewitem_profile_image)
+//            Glide.with(p0.itemView.context).load(contentDTOs!![p1].imageUrl).apply(RequestOptions().circleCrop()).into(viewholder.commentviewitem_imageview_profile)
+            FirebaseFirestore.getInstance().collection("profileImages").document(contentDTOs[p1].uid!!).get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    var url = task.result!!["image"]
+                    Glide.with(p0.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(view!!.commentviewitem_imageview_profile)
+                }
+            }
 
             // 버튼이 클릭되었을때
             viewholder.detailviewitem_favorite_imageview.setOnClickListener {
@@ -121,7 +129,7 @@ class DetailViewFragment : Fragment() {
             }
 
             // 프로필 이미지 클릭했을때
-            viewholder.detailviewitem_profile_image.setOnClickListener {
+            viewholder.commentviewitem_imageview_profile.setOnClickListener {
                 var fragment = UserFragment()
                 var bundle = Bundle()
                 bundle.putString("destinationUid", contentDTOs[p1].uid)
@@ -164,6 +172,9 @@ class DetailViewFragment : Fragment() {
             alarmDTO.kind = 0
             alarmDTO.timestamp = System.currentTimeMillis()
             FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+            var message = FirebaseAuth.getInstance()?.currentUser?.email + "이 " + getString(R.string.alarm_favorite)
+            FcmPush.instance.sendMessage(destinationUid, "InstaClone", message)
         }
     }
 }

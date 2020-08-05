@@ -55,6 +55,9 @@ class CommentActivity : AppCompatActivity() {
         alarmDTO.timestamp = System.currentTimeMillis()
         alarmDTO.message = message
         FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+        var msg = FirebaseAuth.getInstance().currentUser?.email + "이 " + getString(R.string.alarm_comment) + message
+        FcmPush.instance.sendMessage(destinationUid, "InstaClone", msg)
     }
 
     inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
