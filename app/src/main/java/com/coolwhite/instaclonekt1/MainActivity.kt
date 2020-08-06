@@ -144,6 +144,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         if(System.currentTimeMillis()-lastTimeBackPressed<=1500)
             finish()
         lastTimeBackPressed=System.currentTimeMillis()
-        Toast.makeText(this,"@string/backPressed",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"이전 버튼을 한 번 더 누르면 종료됩니다",Toast.LENGTH_SHORT).show()
     }
 }

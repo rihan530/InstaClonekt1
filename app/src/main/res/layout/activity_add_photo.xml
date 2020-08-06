@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/instaclone_logo"/>
+                android:src="@drawable/logo_title"/>
 
         </androidx.appcompat.widget.Toolbar>
 

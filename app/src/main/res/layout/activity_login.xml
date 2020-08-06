@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/back"
+        android:background="@color/colorWhite"
         tools:context=".LoginActivity">
 
         <ProgressBar
@@ -20,7 +20,7 @@
             android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/insta_login_image"></ImageView>
+            android:src="@drawable/login_image"></ImageView>
 
         <LinearLayout
             android:id="@+id/signin_layout"
